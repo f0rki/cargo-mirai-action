@@ -1,0 +1,1 @@
+# cargo-mirai-action
