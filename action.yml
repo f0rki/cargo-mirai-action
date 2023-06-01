@@ -1,0 +1,45 @@
+name: 'cargo-mirai-action'
+description: 'run cargo mirai static analyzer'
+
+inputs:
+  mirai_log_level:
+    description: 'log level for mirai (warn|info|debug|trace)'
+    default: warn
+  mirai_diag_level:
+    description: 'diagnostics level for mirai (default|verify|library|paranoid)'
+    default: default
+  extra_mirai_flags:
+    description: 'pass extra arguments on to MIRAI (see https://github.com/facebookexperimental/MIRAI#how-to-use-mirai)'
+    default: ""
+  lib:
+    description: 'Run on the library target of the crate (true|false)'
+    default: false 
+  all_targets:
+    description: 'Run on all targets (true|false)'
+    default: false
+  all_features:
+    description: 'enable all features (true|false)'
+    default: false
+  no_default_features:
+    description: 'disables all default features (true|false)'
+    default: false
+  features:
+    description: 'features to enable (list of features as passed to --features)'
+    default: ""
+  extra_args:
+    description: 'pass extra arguments on the cli (see cargo check)'
+    default: ""
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ fromJSON('["", "--lib"]')[inputs.lib] }}
+    - ${{ fromJSON('["", "--all-targets"]')[inputs.all_targets] }}
+    - ${{ fromJSON('["", "--all-features"]')[inputs.all_features] }}
+    - ${{ fromJSON('["", "--no-default-features"]')[inputs.no_default_features] }}
+    - ${{ fromJSON('["", "--features"]')[inputs.features != ""] }} ${{ inputs.features }}
+    - ${{ inputs.extra_args }}
+  env:
+    MIRAI_FLAGS: --diag=${{ inputs.mirai_diag_level }} ${{ inputs.extra_mirai_flags }}
+    MIRAI_LOG: ${{ inputs.mirai_log_level }}
