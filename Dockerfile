@@ -17,5 +17,6 @@ RUN cd /opt/ \
   && cargo install --locked --path checker \
   && rustup default $(cat rust-toolchain.toml | grep channel | cut -d '=' -f 2 | sed 's/ *"//g')
 
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
-ENTRYPOINT [ "cargo", "mirai" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
