@@ -38,7 +38,7 @@ runs:
     - ${{ fromJSON('["", "--all-targets"]')[inputs.all_targets] }}
     - ${{ fromJSON('["", "--all-features"]')[inputs.all_features] }}
     - ${{ fromJSON('["", "--no-default-features"]')[inputs.no_default_features] }}
-    - "${{ fromJSON('[\"\", \"--features\"]')[inputs.features != ''] }} ${{ inputs.features }}"
+    - "${{ fromJSON('[\"\", \"--features \"]')[inputs.features != ''] }}${{ inputs.features }}"
     - ${{ inputs.extra_args }}
   env:
     MIRAI_FLAGS: "--diag=${{ inputs.mirai_diag_level }} ${{ inputs.extra_mirai_flags }}"
